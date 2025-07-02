@@ -25,7 +25,7 @@ banner() {
 }
 
 templates() {
-    wget -q -O /var/www/${subspath}/template-1.json https://raw.githubusercontent.com/A-Zuro/Secret-Sing-Box/master/Config-Templates/client.json
+    wget -q -O /var/www/${subspath}/template-1.json https://raw.githubusercontent.com/moosti/Secret-Sing-Box-IR/master/Config-Templates/client.json
 
     if [ $? -eq 0 ]
     then
@@ -672,7 +672,7 @@ cf_ip_settings() {
     echo -e "${red}ВНИМАНИЕ!${clear}"
     echo "Этот пункт рекомендуется в случае недоступности IP, который Cloudflare выделил вашему домену для проксирования"
     echo "Нужно просканировать диапазоны IP Cloudflare с вашего устройства и самостоятельно выбрать оптимальный IP"
-    echo "Инструкция: https://github.com/A-Zuro/Secret-Sing-Box/blob/main/Docs/cf-scan-ip-ru.md"
+    echo "Инструкция: https://github.com/moosti/Secret-Sing-Box-IR/blob/main/Docs/cf-scan-ip-ru.md"
     echo ""
 
     while [[ $username != "x" ]] && [[ $username != "х" ]]
@@ -840,7 +840,7 @@ check_nextlink() {
 }
 
 chain_end() {
-    config_temp=$(curl -s https://raw.githubusercontent.com/A-Zuro/Secret-Sing-Box/master/Config-Templates/config.json)
+    config_temp=$(curl -s https://raw.githubusercontent.com/moosti/Secret-Sing-Box-IR/master/Config-Templates/config.json)
 
     if [ $(jq -e . >/dev/null 2>&1 <<< "${config_temp}"; echo $?) -eq 0 ] && [ -n "${config_temp}" ]
     then
@@ -1416,9 +1416,9 @@ update_ssb() {
     export -f edit_configs_sync
     export -f sync_client_configs_github
 
-    if [ $(wget -q -O /dev/null https://raw.githubusercontent.com/A-Zuro/Secret-Sing-Box/master/Scripts/update-server.sh; echo $?) -eq 0 ]
+    if [ $(wget -q -O /dev/null https://raw.githubusercontent.com/moosti/Secret-Sing-Box-IR/master/Scripts/update-server.sh; echo $?) -eq 0 ]
     then
-        bash <(curl -Ls https://raw.githubusercontent.com/A-Zuro/Secret-Sing-Box/master/Scripts/update-server.sh)
+        bash <(curl -Ls https://raw.githubusercontent.com/moosti/Secret-Sing-Box-IR/master/Scripts/update-server.sh)
         exit 0
     else
         echo -e "${red}Ошибка: не удалось загрузить данные с GitHub${clear}"

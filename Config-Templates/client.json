@@ -13,7 +13,7 @@
       },
       {
         "tag": "dns-local",
-        "address": "195.208.4.1",
+        "address": "8.8.8.8",
         "detour": "direct"
       },
       {
@@ -28,6 +28,13 @@
         ],
         "server": "dns-block",
         "disable_cache": true
+      },
+      {
+        "rule_set": [
+          "geosite-ir",
+          "geoip-ir"
+        ],
+        "outbound": "direct"
       },
       {
         "domain_suffix": [
@@ -249,100 +256,24 @@
       },
       {
         "domain_suffix": [
-          ".ru",
-          ".su",
-          ".ru.com",
-          ".ru.net",
-          "DOMAIN",
-          "wikipedia.org",
-          "kudago.com",
-          "kinescope.io",
-          "redheadsound.studio",
-          "plplayer.online",
-          "lomont.site",
-          "remanga.org",
-          "shopstory.live"
+          ".ir",
+          "DOMAIN"
         ],
         "domain_keyword": [
-          "xn--",
-          "miradres",
-          "premier",
-          "shutterstock",
-          "2gis",
-          "diginetica",
-          "kinescopecdn",
-          "researchgate",
-          "nextcloud",
-          "wiki",
-          "kaspersky",
-          "stepik",
-          "likee",
-          "snapchat",
-          "yappy",
-          "pikabu",
-          "okko",
-          "wink",
-          "kion",
-          "roblox",
-          "wildberries",
-          "aliexpress"
+          "xn--"
         ],
         "ip_cidr": [
           "SERVER-IP"
         ],
         "rule_set": [
-          "gov-ru",
-          "yandex",
-          "vk",
-          "mailru",
-          "ozon",
-          "zoom",
-          "reddit",
-          "twitch",
-          "tumblr",
-          "pinterest",
-          "deviantart",
-          "duckduckgo",
-          "yahoo",
-          "mozilla",
-          "samsung",
-          "huawei",
-          "apple",
-          "nvidia",
-          "xiaomi",
-          "hp",
-          "asus",
-          "lenovo",
-          "lg",
-          "oracle",
-          "adobe",
-          "blender",
-          "drweb",
-          "gitlab",
-          "debian",
-          "canonical",
-          "python",
-          "doi",
-          "springer",
-          "elsevier",
-          "sciencedirect",
-          "clarivate",
-          "sci-hub",
-          "duolingo",
-          "aljazeera",
-          "torrent-clients"
+          "geoip-ir",
+          "geosite-ir"
         ],
         "outbound": "direct"
       },
       {
         "action": "resolve",
         "strategy": "prefer_ipv4"
-      },
-      {
-        "rule_set": [
-          "geoip-ru"
-        ],
-        "outbound": "direct"
       },
       {
         "inbound": [
@@ -359,16 +290,16 @@
         "url": "https://DOMAIN/RULESETPATH/torrent-clients.json"
       },
       {
-        "tag": "geoip-ru",
+        "tag": "geoip-ir",
         "type": "remote",
         "format": "binary",
-        "url": "https://DOMAIN/RULESETPATH/geoip-ru.srs"
+        "url": "https://DOMAIN/RULESETPATH/geoip-ir.srs"
       },
       {
-        "tag": "gov-ru",
+        "tag": "geosite-ir",
         "type": "remote",
         "format": "binary",
-        "url": "https://DOMAIN/RULESETPATH/geosite-category-gov-ru.srs"
+        "url": "https://DOMAIN/RULESETPATH/geosite-ir.srs"
       },
       {
         "tag": "yandex",

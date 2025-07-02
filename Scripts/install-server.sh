@@ -1291,13 +1291,14 @@ generate_pass() {
 download_rule_sets() {
     mkdir /var/www/${rulesetpath}
     wget -P /var/www/${rulesetpath} https://raw.githubusercontent.com/FPPweb3/sb-rule-sets/main/torrent-clients.json
-    wget -P /var/www/${rulesetpath} https://github.com/SagerNet/sing-geoip/raw/rule-set/geoip-ru.srs
+    wget -P /var/www/${rulesetpath} https://raw.githubusercontent.com/Chocolate4U/Iran-sing-box-rules/rule-set/geoip-ir.srs
+    wget -P /var/www/${rulesetpath} https://raw.githubusercontent.com/Chocolate4U/Iran-sing-box-rules/rule-set/geosite-ir.srs
 
     for i in $(seq 0 $(expr $(jq ".route.rule_set | length" /var/www/${subspath}/1${userkey}-TRJ-CLIENT.json) - 1))
     do
         ruleset_link=$(jq -r ".route.rule_set[${i}].url" /var/www/${subspath}/1${userkey}-TRJ-CLIENT.json)
         ruleset=${ruleset_link#"https://${domain}/${rulesetpath}/"}
-        if [[ "${ruleset}" == "geoip-ru.srs" ]] || [[ "${ruleset}" == "torrent-clients.json" ]]
+        if [[ "${ruleset}" == "geoip-ir.srs" ]] || [[ "${ruleset}" == "torrent-clients.json" ]]
         then
             continue
         fi
@@ -1315,7 +1316,7 @@ download_rule_sets() {
     done
 
     chmod -R 755 /var/www/${rulesetpath}
-    wget -O /usr/local/bin/rsupdate https://raw.githubusercontent.com/A-Zuro/Secret-Sing-Box/master/Scripts/ruleset-update.sh
+    wget -O /usr/local/bin/rsupdate https://raw.githubusercontent.comoosti/Secret-Sing-Box-IR-IR/master/Scripts/ruleset-update.sh
     chmod +x /usr/local/bin/rsupdate
     { crontab -l; echo "10 2 * * * /usr/local/bin/rsupdate"; } | crontab -
 }
@@ -1335,7 +1336,7 @@ cat > /etc/sing-box/config.json <<EOF
     "servers": [
       {
         "tag": "dns-remote",
-        "address": "tls://1.1.1.1"
+        "address": "tls://8.8.8.8"
       },
       {
         "tag": "dns-block",
@@ -1433,47 +1434,34 @@ cat > /etc/sing-box/config.json <<EOF
       },
       {
         "rule_set": [
-          "geoip-ru",
-          "gov-ru",
-          "openai",
-          "google-deepmind",
-          "telegram"
-        ],
-        "domain_suffix": [
-          ".ru",
-          ".su",
-          ".ru.com",
-          ".ru.net",
-          "rutracker.org",
-          "rutracker.cc",
-          "habr.com",
-          "ntc.party",
-          "canva.com"
-        ],
-        "domain_keyword": [
-          "xn--"
-        ],
-        "outbound": "warp"
-      },
-      {
-        "rule_set": [
           "google"
         ],
         "outbound": "IPv4"
+      },
+      {
+        "domain_suffix": ".ir",
+        "outbound": "direct"
+      },
+      {
+        "rule_set": [
+          "geosite-ir",
+          "geoip-ir"
+        ]
+        "outbound": "direct"
       }
     ],
     "rule_set": [
       {
-        "tag": "geoip-ru",
+        "tag": "geoip-ir",
         "type": "local",
         "format": "binary",
-        "path": "/var/www/${rulesetpath}/geoip-ru.srs"
+        "path": "/var/www/${rulesetpath}/geoip-ir.srs"
       },
       {
-        "tag": "gov-ru",
+        "tag": "geosite-ir",
         "type": "local",
         "format": "binary",
-        "path": "/var/www/${rulesetpath}/geosite-category-gov-ru.srs"
+        "path": "/var/www/${rulesetpath}/geosite-ir.srs"
       },
       {
         "tag": "category-ads-all",
@@ -1549,13 +1537,13 @@ cat > /var/www/${subspath}/1${userkey}-TRJ-CLIENT.json <<EOF
     "servers": [
       {
         "tag": "dns-remote",
-        "address": "tls://1.1.1.1",
+        "address": "tls://8.8.8.8",
         "client_subnet": "${serverip}",
         "detour": "proxy"
       },
       {
         "tag": "dns-local",
-        "address": "195.208.4.1",
+        "address": "8.8.8.8",
         "detour": "direct"
       },
       {
@@ -1572,31 +1560,6 @@ cat > /var/www/${subspath}/1${userkey}-TRJ-CLIENT.json <<EOF
         "disable_cache": true
       },
       {
-        "domain_suffix": [
-          "habr.com",
-          "kemono.su",
-          "jut.su",
-          "kara.su",
-          "theins.ru",
-          "tvrain.ru",
-          "echo.msk.ru",
-          "the-village.ru",
-          "snob.ru",
-          "novayagazeta.ru",
-          "moscowtimes.ru"
-        ],
-        "domain_keyword": [
-          "animego",
-          "yummyanime",
-          "yummy-anime",
-          "animeportal",
-          "anime-portal",
-          "animedub",
-          "anidub",
-          "animelib",
-          "ikianime",
-          "anilibria"
-        ],
         "rule_set": [
           "telegram",
           "google"
@@ -1644,7 +1607,6 @@ cat > /var/www/${subspath}/1${userkey}-TRJ-CLIENT.json <<EOF
           "aliexpress"
         ],
         "rule_set": [
-          "gov-ru",
           "yandex",
           "vk",
           "mailru",
@@ -1758,31 +1720,6 @@ cat > /var/www/${subspath}/1${userkey}-TRJ-CLIENT.json <<EOF
         "method": "drop"
       },
       {
-        "domain_suffix": [
-          "habr.com",
-          "kemono.su",
-          "jut.su",
-          "kara.su",
-          "theins.ru",
-          "tvrain.ru",
-          "echo.msk.ru",
-          "the-village.ru",
-          "snob.ru",
-          "novayagazeta.ru",
-          "moscowtimes.ru"
-        ],
-        "domain_keyword": [
-          "animego",
-          "yummyanime",
-          "yummy-anime",
-          "animeportal",
-          "anime-portal",
-          "animedub",
-          "anidub",
-          "animelib",
-          "ikianime",
-          "anilibria"
-        ],
         "rule_set": [
           "telegram",
           "google"
@@ -1791,88 +1728,15 @@ cat > /var/www/${subspath}/1${userkey}-TRJ-CLIENT.json <<EOF
       },
       {
         "domain_suffix": [
-          ".ru",
-          ".su",
-          ".ru.com",
-          ".ru.net",
-          "${domain}",
-          "wikipedia.org",
-          "kudago.com",
-          "kinescope.io",
-          "redheadsound.studio",
-          "plplayer.online",
-          "lomont.site",
-          "remanga.org",
-          "shopstory.live"
+          ".ir",
+          "${domain}"
         ],
         "domain_keyword": [
           "xn--",
-          "miradres",
-          "premier",
-          "shutterstock",
-          "2gis",
-          "diginetica",
-          "kinescopecdn",
-          "researchgate",
-          "nextcloud",
-          "wiki",
-          "kaspersky",
-          "stepik",
-          "likee",
-          "snapchat",
-          "yappy",
-          "pikabu",
-          "okko",
-          "wink",
-          "kion",
-          "roblox",
-          "wildberries",
-          "aliexpress"
+          "wiki"
         ],
         "ip_cidr": [
           "${serverip}"
-        ],
-        "rule_set": [
-          "gov-ru",
-          "yandex",
-          "vk",
-          "mailru",
-          "ozon",
-          "zoom",
-          "reddit",
-          "twitch",
-          "tumblr",
-          "pinterest",
-          "deviantart",
-          "duckduckgo",
-          "yahoo",
-          "mozilla",
-          "samsung",
-          "huawei",
-          "apple",
-          "nvidia",
-          "xiaomi",
-          "hp",
-          "asus",
-          "lenovo",
-          "lg",
-          "oracle",
-          "adobe",
-          "blender",
-          "drweb",
-          "gitlab",
-          "debian",
-          "canonical",
-          "python",
-          "doi",
-          "springer",
-          "elsevier",
-          "sciencedirect",
-          "clarivate",
-          "sci-hub",
-          "duolingo",
-          "aljazeera",
-          "torrent-clients"
         ],
         "outbound": "direct"
       },
@@ -1882,7 +1746,8 @@ cat > /var/www/${subspath}/1${userkey}-TRJ-CLIENT.json <<EOF
       },
       {
         "rule_set": [
-          "geoip-ru"
+          "geoip-ir",
+          "geosite-ir"
         ],
         "outbound": "direct"
       },
@@ -1901,16 +1766,16 @@ cat > /var/www/${subspath}/1${userkey}-TRJ-CLIENT.json <<EOF
         "url": "https://${domain}/${rulesetpath}/torrent-clients.json"
       },
       {
-        "tag": "geoip-ru",
+        "tag": "geoip-ir",
         "type": "remote",
         "format": "binary",
-        "url": "https://${domain}/${rulesetpath}/geoip-ru.srs"
+        "url": "https://${domain}/${rulesetpath}/geoip-ir.srs"
       },
       {
-        "tag": "gov-ru",
+        "tag": "geosite-ir",
         "type": "remote",
         "format": "binary",
-        "url": "https://${domain}/${rulesetpath}/geosite-category-gov-ru.srs"
+        "url": "https://${domain}/${rulesetpath}/geosite-ir.srs"
       },
       {
         "tag": "yandex",
@@ -2700,7 +2565,7 @@ add_sbmanager() {
         sbmanager_file="sb-manager-en.sh"
     fi
 
-    wget -O /usr/local/bin/sbmanager https://raw.githubusercontent.com/A-Zuro/Secret-Sing-Box/master/Scripts/${sbmanager_file}
+    wget -O /usr/local/bin/sbmanager https://raw.githubusercontent.com/moosti/Secret-Sing-Box-IR/master/Scripts/${sbmanager_file}
     chmod +x /usr/local/bin/sbmanager
     echo "alias ssb='/usr/local/bin/sbmanager'" >> /etc/bash.bashrc
 }
@@ -2721,8 +2586,8 @@ add_sub_page() {
         sub_page_file="sub-en-hapr.html"
     fi
 
-    wget -O /var/www/${subspath}/sub.html https://raw.githubusercontent.com/A-Zuro/Secret-Sing-Box/master/Subscription-Page/${sub_page_file}
-    wget -O /var/www/${subspath}/background.jpg https://raw.githubusercontent.com/A-Zuro/Secret-Sing-Box/master/Subscription-Page/background.jpg
+    wget -O /var/www/${subspath}/sub.html https://raw.githubusercontent.com/moosti/Secret-Sing-Box-IR/master/Subscription-Page/${sub_page_file}
+    wget -O /var/www/${subspath}/background.jpg https://raw.githubusercontent.com/moosti/Secret-Sing-Box-IR/master/Subscription-Page/background.jpg
     sed -i -e "s/DOMAIN/$domain/g" -e "s/SUBSCRIPTION-PATH/$subspath/g" /var/www/${subspath}/sub.html
 }
 

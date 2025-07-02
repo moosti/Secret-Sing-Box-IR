@@ -22,11 +22,13 @@ then
     mv -f /var/www/${rulesetpath}/torrent-clients.json.1 /var/www/${rulesetpath}/torrent-clients.json
 fi
 
-wget -q -O /var/www/${rulesetpath}/geoip-ru.srs.1 https://github.com/SagerNet/sing-geoip/raw/rule-set/geoip-ru.srs
+wget -q -O /var/www/${rulesetpath}/geoip-ir.srs.1 https://raw.githubusercontent.com/Chocolate4U/Iran-sing-box-rules/rule-set/geoip-ir.srs
+wget -q -O /var/www/${rulesetpath}/geosite-ir.srs.1 https://raw.githubusercontent.com/Chocolate4U/Iran-sing-box-rules/rule-set/geosite-ir.srs
 
 if [ $? -eq 0 ]
 then
-    mv -f /var/www/${rulesetpath}/geoip-ru.srs.1 /var/www/${rulesetpath}/geoip-ru.srs
+    mv -f /var/www/${rulesetpath}/geoip-ir.srs.1 /var/www/${rulesetpath}/geoip-ir.srs
+    mv -f /var/www/${rulesetpath}/geosite-ir.srs.1 /var/www/${rulesetpath}/geosite-ir.srs
 fi
 
 chmod -R 755 /var/www/${rulesetpath}

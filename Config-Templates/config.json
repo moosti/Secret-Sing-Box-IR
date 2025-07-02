@@ -106,8 +106,13 @@
       },
       {
         "rule_set": [
-          "geoip-ru",
-          "gov-ru",
+          "geosite-ir",
+          "geoip-ir"
+        ],
+        "outbound": "direct"
+      },
+      {
+        "rule_set": [
           "openai",
           "google-deepmind",
           "telegram"
@@ -136,49 +141,49 @@
       }
     ],
     "rule_set": [
-      {
-        "tag": "geoip-ru",
-        "type": "local",
-        "format": "binary",
-        "path": "/var/www/RULESETPATH/geoip-ru.srs"
-      },
-      {
-        "tag": "gov-ru",
-        "type": "local",
-        "format": "binary",
-        "path": "/var/www/RULESETPATH/geosite-category-gov-ru.srs"
-      },
-      {
-        "tag": "category-ads-all",
-        "type": "local",
-        "format": "binary",
-        "path": "/var/www/RULESETPATH/geosite-category-ads-all.srs"
-      },
-      {
-        "tag": "telegram",
-        "type": "local",
-        "format": "binary",
-        "path": "/var/www/RULESETPATH/geosite-telegram.srs"
-      },
-      {
-        "tag": "google",
-        "type": "local",
-        "format": "binary",
-        "path": "/var/www/RULESETPATH/geosite-google.srs"
-      },
-      {
-        "tag": "google-deepmind",
-        "type": "local",
-        "format": "binary",
-        "path": "/var/www/RULESETPATH/geosite-google-deepmind.srs"
-      },
-      {
-        "tag": "openai",
-        "type": "local",
-        "format": "binary",
-        "path": "/var/www/RULESETPATH/geosite-openai.srs"
-      }
-    ]
+			{
+				"tag": "geoip-ir",
+				"type": "local",
+				"format": "binary",
+				"path": "/var/www/RULESETPATH/geoip-ir.srs"
+			},
+			{
+				"tag": "geosite-ir",
+				"type": "local",
+				"format": "binary",
+				"path": "/var/www/RULESETPATH/geosite-ir.srs"
+			},
+			{
+				"tag": "category-ads-all",
+				"type": "local",
+				"format": "binary",
+				"path": "/var/www/RULESETPATH/geosite-category-ads-all.srs"
+			},
+			{
+				"tag": "telegram",
+				"type": "local",
+				"format": "binary",
+				"path": "/var/www/RULESETPATH/geosite-telegram.srs"
+			},
+			{
+				"tag": "google",
+				"type": "local",
+				"format": "binary",
+				"path": "/var/www/RULESETPATH/geosite-google.srs"
+			},
+			{
+				"tag": "google-deepmind",
+				"type": "local",
+				"format": "binary",
+				"path": "/var/www/RULESETPATH/geosite-google-deepmind.srs"
+			},
+			{
+				"tag": "openai",
+				"type": "local",
+				"format": "binary",
+				"path": "/var/www/RULESETPATH/geosite-openai.srs"
+			}
+		]
   },
   "experimental": {
     "cache_file": {
