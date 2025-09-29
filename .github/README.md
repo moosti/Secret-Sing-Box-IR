@@ -1,7 +1,7 @@
 <div align="center">
     <img src="https://github.com/user-attachments/assets/1b2ec02b-6bf6-4c62-b8e3-bfba4aaafd93" alt="SSB Logo" width="325" height="auto">
     <h1>SECRET SING-BOX</h1>
-    Русский | <a href="https://github.com/A-Zuro/Secret-Sing-Box/blob/main/.github/README-EN.md">English</a><br><br>
+    Русский | <a href="https://github.com/moosti/Secret-Sing-Box-IR/blob/main/.github/README-EN.md">English</a><br><br>
 </div>
 
 ### Простая настройка прокси с терминированием TLS на NGINX или HAProxy
