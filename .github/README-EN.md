@@ -1,7 +1,7 @@
 <div align="center">
     <img src="https://github.com/user-attachments/assets/1b2ec02b-6bf6-4c62-b8e3-bfba4aaafd93" alt="SSB Logo" width="325" height="auto">
     <h1>SECRET SING-BOX</h1>
-    <a href="https://github.com/A-Zuro/Secret-Sing-Box/blob/main/.github/README.md">Русский</a> | English<br><br>
+    <a href="https://github.com/moosti/Secret-Sing-Box-IR/blob/main/.github/README.md">Русский</a> | English<br><br>
 </div>
 
 ### Easy setup of a proxy with TLS termination on NGINX or HAProxy
@@ -18,7 +18,7 @@ This script is designed to fully and quickly configure a secure proxy server wit
 Both setup methods make it impossible to detect Sing-Box from the outside, which improves security.
 
 > [!IMPORTANT]
-> Recommended OS for the server: Debian 11/12 or Ubuntu 22.04/24.04. Just 512 MB of RAM, 5 GB of disk space and 1 processor core are sufficient. You will also need an IPv4 on the server and your own domain ([How to set it up?](https://github.com/A-Zuro/Secret-Sing-Box/blob/main/.github/cf-settings-en.md)). Run as root on a newly installed system. It's necessary to update and reboot the system before running this script.
+> Recommended OS for the server: Debian 11/12 or Ubuntu 22.04/24.04. Just 512 MB of RAM, 5 GB of disk space and 1 processor core are sufficient. You will also need an IPv4 on the server and your own domain ([How to set it up?](https://github.com/moosti/Secret-Sing-Box-IR/blob/main/.github/cf-settings-en.md)). Run as root on a newly installed system. It's necessary to update and reboot the system before running this script.
 
 > [!NOTE]
 > With routing rules for Russia. Open ports on the server: 443 and SSH.
@@ -44,7 +44,7 @@ Both setup methods make it impossible to detect Sing-Box from the outside, which
 To setup the server, run this command on it:
 
 ```
-bash <(curl -Ls https://raw.githubusercontent.com/A-Zuro/Secret-Sing-Box/master/Scripts/install-server.sh); source /etc/bash.bashrc
+bash <(curl -Ls https://raw.githubusercontent.com/moosti/Secret-Sing-Box-IR/master/Scripts/install-server.sh); source /etc/bash.bashrc
 ```
 
 Then just enter the necessary information:
@@ -70,7 +70,7 @@ Then follow the instructions:
 
 Option 5 synchronizes the settings in client configs of all users, which eliminates the need to edit the config of each user separately:
 
-5.1. Synchronizes settings with the [template from GitHub](https://github.com/A-Zuro/Secret-Sing-Box/blob/main/Config-Templates/client.json).
+5.1. Synchronizes settings with the [template from GitHub](https://github.com/moosti/Secret-Sing-Box-IR/blob/main/Config-Templates/client.json).
 
 5.2. Synchronizes settings with the local template, allows to set custom rules in client configs. If new rule sets are added to the configs by using this option, they will be automatically downloaded on the server if they are from [SagerNet](https://github.com/SagerNet/sing-geosite/tree/rule-set).
 
@@ -88,14 +88,14 @@ warp-cli registration license CMD5m479-Y5hS6y79-U06c5mq9
 >
 > On some devices, "stack": "system" in tun interface settings in client configs might not work. In such cases, it is recommended to replace it with "gvisor" by using option 4 in the settings menu (see above).
 
-[Android, iOS and macOS](https://github.com/A-Zuro/Secret-Sing-Box/blob/main/.github/Sing-Box-Android-iOS-en.md). The guide is given for Android, the app interface is different on iOS and macOS, but it has similar settings.
+[Android, iOS and macOS](https://github.com/moosti/Secret-Sing-Box-IR/blob/main/.github/Sing-Box-Android-iOS-en.md). The guide is given for Android, the app interface is different on iOS and macOS, but it has similar settings.
 
-[Windows](https://github.com/A-Zuro/Secret-Sing-Box/blob/main/.github/Sing-Box-Windows-en.md). This method includes setting up a pure Sing-Box core and does not have a GUI.
+[Windows](https://github.com/moosti/Secret-Sing-Box-IR/blob/main/.github/Sing-Box-Windows-en.md). This method includes setting up a pure Sing-Box core and does not have a GUI.
 
-[Linux](https://github.com/A-Zuro/Secret-Sing-Box/blob/main/.github/README-EN.md#client-setup). Run the command below and follow the instructions (for Debian-based distributions).
+[Linux](https://github.com/moosti/Secret-Sing-Box-IR/blob/main/.github/README-EN.md#client-setup). Run the command below and follow the instructions (for Debian-based distributions).
 ```
-bash <(curl -Ls https://raw.githubusercontent.com/A-Zuro/Secret-Sing-Box/master/Scripts/sb-pc-linux-en.sh)
+bash <(curl -Ls https://raw.githubusercontent.com/moosti/Secret-Sing-Box-IR/master/Scripts/sb-pc-linux-en.sh)
 ```
 
 ### Stargazers over time:
-[![Stargazers over time](https://starchart.cc/A-Zuro/Secret-Sing-Box.svg?variant=adaptive)](https://starchart.cc/A-Zuro/Secret-Sing-Box)
+[![Stargazers over time](https://starchart.cc/moosti/Secret-Sing-Box-IR.svg?variant=adaptive)](https://starchart.cc/moosti/Secret-Sing-Box-IR)
