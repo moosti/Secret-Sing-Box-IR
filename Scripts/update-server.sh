@@ -164,7 +164,7 @@ update_services() {
 
     extract_values
     cp /etc/sing-box/config.json /etc/sing-box/config.json.0
-    wget -O /etc/sing-box/config.json.1 https://raw.githubusercontent.com/A-Zuro/Secret-Sing-Box/master/Config-Templates/config.json
+    wget -O /etc/sing-box/config.json.1 https://raw.githubusercontent.com/moosti/Secret-Sing-Box-IR/master/Config-Templates/config.json
 
     if [ $? -eq 0 ]
     then
@@ -233,8 +233,8 @@ update_sub_page() {
         sub_page_file="sub-en-hapr.html"
     fi
 
-    wget -O /var/www/${subspath}/sub.html https://raw.githubusercontent.com/A-Zuro/Secret-Sing-Box/master/Subscription-Page/${sub_page_file}
-    wget -O /var/www/${subspath}/background.jpg https://raw.githubusercontent.com/A-Zuro/Secret-Sing-Box/master/Subscription-Page/background.jpg
+    wget -O /var/www/${subspath}/sub.html https://raw.githubusercontent.com/moosti/Secret-Sing-Box-IR/master/Subscription-Page/${sub_page_file}
+    wget -O /var/www/${subspath}/background.jpg https://raw.githubusercontent.com/moosti/Secret-Sing-Box-IR/master/Subscription-Page/background.jpg
     sed -i -e "s/DOMAIN/$domain/g" -e "s/SUBSCRIPTION-PATH/$subspath/g" /var/www/${subspath}/sub.html
 }
 
@@ -253,8 +253,8 @@ update_scripts() {
         sbmanager_file="sb-manager-en.sh"
     fi
 
-    wget -O /usr/local/bin/sbmanager https://raw.githubusercontent.com/A-Zuro/Secret-Sing-Box/master/Scripts/${sbmanager_file}
-    wget -O /usr/local/bin/rsupdate https://raw.githubusercontent.com/A-Zuro/Secret-Sing-Box/master/Scripts/ruleset-update.sh
+    wget -O /usr/local/bin/sbmanager https://raw.githubusercontent.com/moosti/Secret-Sing-Box-IR/master/Scripts/${sbmanager_file}
+    wget -O /usr/local/bin/rsupdate https://raw.githubusercontent.com/moosti/Secret-Sing-Box-IR/master/Scripts/ruleset-update.sh
     chmod +x /usr/local/bin/sbmanager /usr/local/bin/rsupdate
     grep -q "alias ssb=" /etc/bash.bashrc || echo "alias ssb='/usr/local/bin/sbmanager'" >> /etc/bash.bashrc
     echo ""

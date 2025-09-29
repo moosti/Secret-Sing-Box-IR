@@ -25,7 +25,7 @@ banner() {
 }
 
 templates() {
-    wget -q -O /var/www/${subspath}/template-1.json https://raw.githubusercontent.com/A-Zuro/Secret-Sing-Box/master/Config-Templates/client.json
+    wget -q -O /var/www/${subspath}/template-1.json https://raw.githubusercontent.com/moosti/Secret-Sing-Box-IR/master/Config-Templates/client.json
 
     if [ $? -eq 0 ]
     then
@@ -624,7 +624,7 @@ cf_ip_settings() {
     echo -e "${red}ATTENTION!${clear}"
     echo "This option is recommended in case of unavailability of the IP that Cloudflare allocated to your domain for proxying"
     echo "You need to scan Cloudflare IP ranges from your device and choose the optimal IP by yourself"
-    echo "Instruction: https://github.com/A-Zuro/Secret-Sing-Box/blob/main/.github/cf-scan-ip-en.md"
+    echo "Instruction: https://github.com/moosti/Secret-Sing-Box-IR/blob/main/.github/cf-scan-ip-en.md"
     echo ""
 
     while [[ $username != "x" ]] && [[ $username != "х" ]]
@@ -819,7 +819,7 @@ manage_rule_sets() {
 chain_end() {
     if [[ $(jq 'any(.route.rules[]; .outbound == "warp")' /etc/sing-box/config.json) == "true" ]]
     then
-        config_temp=$(curl -s https://raw.githubusercontent.com/A-Zuro/Secret-Sing-Box/master/Config-Templates/config.json)
+        config_temp=$(curl -s https://raw.githubusercontent.com/moosti/Secret-Sing-Box-IR/master/Config-Templates/config.json)
 
         if [ $(jq -e . >/dev/null 2>&1 <<< "${config_temp}"; echo $?) -ne 0 ] || [ -z "${config_temp}" ]
         then
@@ -1111,7 +1111,7 @@ check_cf_token() {
     do
         echo ""
         echo -e "${red}Error: invalid domain name, API token/key or email${clear}"
-        echo -e "${red}Instruction: https://github.com/A-Zuro/Secret-Sing-Box/blob/main/.github/cf-settings-en.md#getting-cloudflare-api-token${clear}"
+        echo -e "${red}Instruction: https://github.com/moosti/Secret-Sing-Box-IR/blob/main/.github/cf-settings-en.md#getting-cloudflare-api-token${clear}"
         enter_domain_data
         echo "Checking domain name, API token/key and email..."
         get_test_response
@@ -1323,9 +1323,9 @@ update_ssb() {
     export -f edit_configs_sync
     export -f sync_client_configs_github
 
-    if [ $(wget -q -O /dev/null https://raw.githubusercontent.com/A-Zuro/Secret-Sing-Box/master/Scripts/update-server.sh; echo $?) -eq 0 ]
+    if [ $(wget -q -O /dev/null https://raw.githubusercontent.com/moosti/Secret-Sing-Box-IR/master/Scripts/update-server.sh; echo $?) -eq 0 ]
     then
-        bash <(curl -Ls https://raw.githubusercontent.com/A-Zuro/Secret-Sing-Box/master/Scripts/update-server.sh)
+        bash <(curl -Ls https://raw.githubusercontent.com/moosti/Secret-Sing-Box-IR/master/Scripts/update-server.sh)
         exit 0
     else
         echo -e "${red}Error: failed to download data from GitHub${clear}"

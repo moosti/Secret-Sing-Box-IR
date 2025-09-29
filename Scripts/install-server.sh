@@ -266,7 +266,7 @@ check_cf_token_ru() {
     do
         echo ""
         echo -e "${red}Ошибка: неправильно введён домен, API токен/ключ или почта${clear}"
-        echo -e "${red}Инструкция: https://github.com/A-Zuro/Secret-Sing-Box/blob/main/.github/cf-settings-ru.md#получение-api-токена-cloudflare${clear}"
+        echo -e "${red}Инструкция: https://github.com/moosti/Secret-Sing-Box-IR/blob/main/.github/cf-settings-ru.md#получение-api-токена-cloudflare${clear}"
         enter_domain_data_ru
         echo "Проверка домена, API токена/ключа и почты..."
         get_test_response
@@ -284,7 +284,7 @@ check_cf_token_en() {
     do
         echo ""
         echo -e "${red}Error: invalid domain name, API token/key or email${clear}"
-        echo -e "${red}Instruction: https://github.com/A-Zuro/Secret-Sing-Box/blob/main/.github/cf-settings-en.md#getting-cloudflare-api-token${clear}"
+        echo -e "${red}Instruction: https://github.com/moosti/Secret-Sing-Box-IR/blob/main/.github/cf-settings-en.md#getting-cloudflare-api-token${clear}"
         enter_domain_data_en
         echo "Checking domain name, API token/key and email..."
         get_test_response
@@ -1150,17 +1150,24 @@ generate_pass() {
 
 download_rule_sets() {
     mkdir /var/www/${rulesetpath}
-    wget -P /var/www/${rulesetpath} https://raw.githubusercontent.com/FPPweb3/sb-rule-sets/main/torrent-clients.json
-    wget -P /var/www/${rulesetpath} https://github.com/SagerNet/sing-geoip/raw/rule-set/geoip-ru.srs
-
+    
+    # Download Iran-specific rule sets
+    wget -P /var/www/${rulesetpath} https://raw.githubusercontent.com/Chocolate4U/Iran-sing-box-rules/rule-set/geoip-ir.srs
+    wget -P /var/www/${rulesetpath} https://raw.githubusercontent.com/Chocolate4U/Iran-sing-box-rules/rule-set/geosite-category-gov-ir.srs
+    wget -P /var/www/${rulesetpath} https://raw.githubusercontent.com/Chocolate4U/Iran-sing-box-rules/rule-set/geosite-ir.srs
+    
+    # Download common rule sets from SagerNet
     for i in $(seq 0 $(expr $(jq ".route.rule_set | length" /var/www/${subspath}/1${userkey}-TRJ-CLIENT.json) - 1))
     do
         ruleset_link=$(jq -r ".route.rule_set[${i}].url" /var/www/${subspath}/1${userkey}-TRJ-CLIENT.json)
         ruleset=${ruleset_link#"https://${domain}/${rulesetpath}/"}
-        if [[ "${ruleset}" == "geoip-ru.srs" ]] || [[ "${ruleset}" == "torrent-clients.json" ]]
+        
+        # Skip Iran-specific rule sets (already downloaded)
+        if [[ "${ruleset}" == "geoip-ir.srs" ]] || [[ "${ruleset}" == "geosite-category-gov-ir.srs" ]] || [[ "${ruleset}" == "geosite-ir.srs" ]]
         then
             continue
         fi
+        
         wget -P /var/www/${rulesetpath} https://github.com/SagerNet/sing-geosite/raw/rule-set/${ruleset}
     done
 
@@ -1172,7 +1179,7 @@ download_rule_sets() {
     done
 
     chmod -R 755 /var/www/${rulesetpath}
-    wget -O /usr/local/bin/rsupdate https://raw.githubusercontent.com/A-Zuro/Secret-Sing-Box/master/Scripts/ruleset-update.sh
+    wget -O /usr/local/bin/rsupdate https://raw.githubusercontent.com/moosti/Secret-Sing-Box-IR/master/Scripts/ruleset-update.sh
     chmod +x /usr/local/bin/rsupdate
     { crontab -l; echo "10 2 * * * /usr/local/bin/rsupdate"; } | crontab -
 }
@@ -1286,48 +1293,84 @@ cat > /etc/sing-box/config.json <<EOF
       },
       {
         "domain_suffix": [
-          ".ru",
-          ".su",
-          ".ru.com",
-          ".ru.net",
-          "rutracker.org",
-          "rutracker.cc",
-          "habr.com",
-          "ntc.party",
-          "canva.com"
+          ".ir",
+          "snapp.ir",
+          "digikala.com",
+          "divar.ir",
+          "aparat.com",
+          "filimo.com",
+          "namasha.com",
+          "cafebazaar.ir",
+          "myket.ir",
+          "alibaba.ir",
+          "torob.com",
+          "shaparak.ir"
         ],
         "domain_keyword": [
-          "xn--"
+          "xn--",
+          "bank",
+          "shaparak",
+          "mellat",
+          "parsian",
+          "saderat",
+          "tejarat",
+          "melli",
+          "sepah",
+          "saman",
+          "pasargad",
+          "eghtesad"
         ],
         "rule_set": [
-          "geoip-ru",
-          "category-gov-ru",
+          "geoip-ir",
+          "category-gov-ir",
+          "ir-sites"
+        ],
+        "outbound": "direct"
+      },
+      {
+        "domain_suffix": [
+          "canva.com"
+        ],
+        "rule_set": [
+          "google",
           "google-deepmind",
           "openai",
           "anthropic",
-          "xai"
+          "xai",
+          "netflix",
+          "spotify",
+          "openai-sora"
         ],
         "outbound": "warp"
       },
       {
         "rule_set": [
-          "google"
+          "facebook",
+          "twitter",
+          "instagram",
+          "youtube"
         ],
         "outbound": "IPv4"
       }
     ],
     "rule_set": [
       {
-        "tag": "geoip-ru",
+        "tag": "geoip-ir",
         "type": "local",
         "format": "binary",
-        "path": "/var/www/${rulesetpath}/geoip-ru.srs"
+        "path": "/var/www/${rulesetpath}/geoip-ir.srs"
       },
       {
-        "tag": "category-gov-ru",
+        "tag": "category-gov-ir",
         "type": "local",
         "format": "binary",
-        "path": "/var/www/${rulesetpath}/geosite-category-gov-ru.srs"
+        "path": "/var/www/${rulesetpath}/geosite-category-gov-ir.srs"
+      },
+      {
+        "tag": "ir-sites",
+        "type": "local",
+        "format": "binary",
+        "path": "/var/www/${rulesetpath}/geosite-ir.srs"
       },
       {
         "tag": "category-ads-all",
@@ -1364,6 +1407,48 @@ cat > /etc/sing-box/config.json <<EOF
         "type": "local",
         "format": "binary",
         "path": "/var/www/${rulesetpath}/geosite-xai.srs"
+      },
+      {
+        "tag": "netflix",
+        "type": "local",
+        "format": "binary",
+        "path": "/var/www/${rulesetpath}/geosite-netflix.srs"
+      },
+      {
+        "tag": "spotify",
+        "type": "local",
+        "format": "binary",
+        "path": "/var/www/${rulesetpath}/geosite-spotify.srs"
+      },
+      {
+        "tag": "openai-sora",
+        "type": "local",
+        "format": "binary",
+        "path": "/var/www/${rulesetpath}/geosite-openai-sora.srs"
+      },
+      {
+        "tag": "facebook",
+        "type": "local",
+        "format": "binary",
+        "path": "/var/www/${rulesetpath}/geosite-facebook.srs"
+      },
+      {
+        "tag": "twitter",
+        "type": "local",
+        "format": "binary",
+        "path": "/var/www/${rulesetpath}/geosite-twitter.srs"
+      },
+      {
+        "tag": "instagram",
+        "type": "local",
+        "format": "binary",
+        "path": "/var/www/${rulesetpath}/geosite-instagram.srs"
+      },
+      {
+        "tag": "youtube",
+        "type": "local",
+        "format": "binary",
+        "path": "/var/www/${rulesetpath}/geosite-youtube.srs"
       }
     ]
   },
@@ -1413,7 +1498,7 @@ cat > /var/www/${subspath}/1${userkey}-TRJ-CLIENT.json <<EOF
       },
       {
         "tag": "dns-local",
-        "address": "195.208.4.1"
+        "address": "10.202.10.202"
       },
       {
         "tag": "dns-block",
@@ -1430,117 +1515,79 @@ cat > /var/www/${subspath}/1${userkey}-TRJ-CLIENT.json <<EOF
       },
       {
         "domain_suffix": [
-          "habr.com",
-          "kemono.su",
-          "jut.su",
-          "kara.su",
-          "theins.ru",
-          "tvrain.ru",
-          "echo.msk.ru",
-          "the-village.ru",
-          "snob.ru",
-          "novayagazeta.ru",
-          "moscowtimes.ru"
+          "twitter.com",
+          "x.com",
+          "facebook.com",
+          "fb.com",
+          "instagram.com",
+          "youtube.com",
+          "googlevideo.com",
+          "whatsapp.com",
+          "whatsapp.net",
+          "signal.org",
+          "bbc.com",
+          "bbc.co.uk",
+          "voanews.com",
+          "rferl.org",
+          "dw.com"
         ],
         "domain_keyword": [
-          "animego",
-          "yummyanime",
-          "yummy-anime",
-          "animeportal",
-          "anime-portal",
-          "animedub",
-          "anidub",
-          "animelib",
-          "ikianime",
-          "anilibria"
+          "facebook",
+          "twitter",
+          "instagram",
+          "youtube",
+          "whatsapp",
+          "telegram"
         ],
         "rule_set": [
           "telegram",
-          "google"
+          "google",
+          "facebook",
+          "twitter",
+          "instagram",
+          "youtube"
         ],
         "server": "dns-remote"
       },
       {
         "domain_suffix": [
-          ".ru",
-          ".su",
-          ".ru.com",
-          ".ru.net",
+          ".ir",
           "${domain}",
-          "wikipedia.org",
-          "kudago.com",
-          "kinescope.io",
-          "redheadsound.studio",
-          "plplayer.online",
-          "lomont.site",
-          "remanga.org",
-          "shopstory.live"
+          "snapp.ir",
+          "digikala.com",
+          "divar.ir",
+          "aparat.com",
+          "filimo.com",
+          "namasha.com",
+          "irancell.ir",
+          "mci.ir",
+          "shatel.ir",
+          "cafebazaar.ir",
+          "myket.ir"
         ],
         "domain_keyword": [
           "xn--",
-          "miradres",
-          "premier",
-          "shutterstock",
-          "2gis",
-          "diginetica",
-          "kinescopecdn",
-          "researchgate",
-          "nextcloud",
-          "wiki",
-          "kaspersky",
-          "stepik",
-          "likee",
-          "snapchat",
-          "yappy",
-          "pikabu",
-          "okko",
-          "wink",
-          "kion",
-          "roblox",
-          "wildberries",
-          "aliexpress"
+          "bank",
+          "shaparak",
+          "mellat",
+          "parsian",
+          "saderat",
+          "tejarat",
+          "melli",
+          "sepah",
+          "saman",
+          "pasargad",
+          "eghtesad",
+          "iran",
+          "yjc",
+          "isna",
+          "irna",
+          "tasnim",
+          "mehr"
         ],
         "rule_set": [
-          "category-gov-ru",
-          "yandex",
-          "vk",
-          "mailru",
-          "ozon",
-          "zoom",
-          "reddit",
-          "twitch",
-          "tumblr",
-          "pinterest",
-          "deviantart",
-          "duckduckgo",
-          "yahoo",
-          "mozilla",
-          "samsung",
-          "huawei",
-          "apple",
-          "nvidia",
-          "xiaomi",
-          "hp",
-          "asus",
-          "lenovo",
-          "lg",
-          "oracle",
-          "adobe",
-          "blender",
-          "drweb",
-          "gitlab",
-          "debian",
-          "canonical",
-          "python",
-          "doi",
-          "springer",
-          "elsevier",
-          "sciencedirect",
-          "clarivate",
-          "sci-hub",
-          "duolingo",
-          "aljazeera",
-          "torrent-clients"
+          "category-gov-ir",
+          "ir-sites"
         ],
         "server": "dns-local"
       },
@@ -1616,120 +1663,92 @@ cat > /var/www/${subspath}/1${userkey}-TRJ-CLIENT.json <<EOF
       },
       {
         "domain_suffix": [
-          "habr.com",
-          "kemono.su",
-          "jut.su",
-          "kara.su",
-          "theins.ru",
-          "tvrain.ru",
-          "echo.msk.ru",
-          "the-village.ru",
-          "snob.ru",
-          "novayagazeta.ru",
-          "moscowtimes.ru"
+          "twitter.com",
+          "x.com",
+          "facebook.com",
+          "fb.com",
+          "instagram.com",
+          "youtube.com",
+          "googlevideo.com",
+          "whatsapp.com",
+          "whatsapp.net",
+          "signal.org",
+          "bbc.com",
+          "bbc.co.uk",
+          "voanews.com",
+          "rferl.org",
+          "dw.com",
+          "reddit.com",
+          "linkedin.com",
+          "medium.com",
+          "discord.com",
+          "spotify.com",
+          "soundcloud.com"
         ],
         "domain_keyword": [
-          "animego",
-          "yummyanime",
-          "yummy-anime",
-          "animeportal",
-          "anime-portal",
-          "animedub",
-          "anidub",
-          "animelib",
-          "ikianime",
-          "anilibria"
+          "facebook",
+          "twitter",
+          "instagram",
+          "youtube",
+          "whatsapp",
+          "telegram"
         ],
         "rule_set": [
           "telegram",
-          "google"
+          "google",
+          "facebook",
+          "twitter",
+          "instagram",
+          "youtube",
+          "reddit",
+          "discord",
+          "spotify",
+          "linkedin"
         ],
         "outbound": "proxy"
       },
       {
         "domain_suffix": [
-          ".ru",
-          ".su",
-          ".ru.com",
-          ".ru.net",
+          ".ir",
           "${domain}",
-          "wikipedia.org",
-          "kudago.com",
-          "kinescope.io",
-          "redheadsound.studio",
-          "plplayer.online",
-          "lomont.site",
-          "remanga.org",
-          "shopstory.live"
+          "snapp.ir",
+          "digikala.com",
+          "divar.ir",
+          "aparat.com",
+          "filimo.com",
+          "namasha.com",
+          "irancell.ir",
+          "mci.ir",
+          "shatel.ir",
+          "cafebazaar.ir",
+          "myket.ir"
         ],
         "domain_keyword": [
           "xn--",
-          "miradres",
-          "premier",
-          "shutterstock",
-          "2gis",
-          "diginetica",
-          "kinescopecdn",
-          "researchgate",
-          "nextcloud",
-          "wiki",
-          "kaspersky",
-          "stepik",
-          "likee",
-          "snapchat",
-          "yappy",
-          "pikabu",
-          "okko",
-          "wink",
-          "kion",
-          "roblox",
-          "wildberries",
-          "aliexpress"
+          "bank",
+          "shaparak",
+          "mellat",
+          "parsian",
+          "saderat",
+          "tejarat",
+          "melli",
+          "sepah",
+          "saman",
+          "pasargad",
+          "eghtesad",
+          "iran",
+          "yjc",
+          "isna",
+          "irna",
+          "tasnim",
+          "mehr"
         ],
         "ip_cidr": [
           "${serverip}"
         ],
         "rule_set": [
-          "category-gov-ru",
-          "yandex",
-          "vk",
-          "mailru",
-          "ozon",
-          "zoom",
-          "reddit",
-          "twitch",
-          "tumblr",
-          "pinterest",
-          "deviantart",
-          "duckduckgo",
-          "yahoo",
-          "mozilla",
-          "samsung",
-          "huawei",
-          "apple",
-          "nvidia",
-          "xiaomi",
-          "hp",
-          "asus",
-          "lenovo",
-          "lg",
-          "oracle",
-          "adobe",
-          "blender",
-          "drweb",
-          "gitlab",
-          "debian",
-          "canonical",
-          "python",
-          "doi",
-          "springer",
-          "elsevier",
-          "sciencedirect",
-          "clarivate",
-          "sci-hub",
-          "duolingo",
-          "aljazeera",
-          "torrent-clients"
+          "category-gov-ir",
+          "ir-sites"
         ],
         "outbound": "direct"
       },
@@ -1739,7 +1758,7 @@ cat > /var/www/${subspath}/1${userkey}-TRJ-CLIENT.json <<EOF
       },
       {
         "rule_set": [
-          "geoip-ru"
+          "geoip-ir"
         ],
         "outbound": "direct"
       },
@@ -1752,28 +1771,22 @@ cat > /var/www/${subspath}/1${userkey}-TRJ-CLIENT.json <<EOF
     ],
     "rule_set": [
       {
-        "tag": "torrent-clients",
-        "type": "remote",
-        "format": "source",
-        "url": "https://${domain}/${rulesetpath}/torrent-clients.json"
-      },
-      {
-        "tag": "geoip-ru",
+        "tag": "geoip-ir",
         "type": "remote",
         "format": "binary",
-        "url": "https://${domain}/${rulesetpath}/geoip-ru.srs"
+        "url": "https://${domain}/${rulesetpath}/geoip-ir.srs"
       },
       {
-        "tag": "category-gov-ru",
+        "tag": "category-gov-ir",
         "type": "remote",
         "format": "binary",
-        "url": "https://${domain}/${rulesetpath}/geosite-category-gov-ru.srs"
+        "url": "https://${domain}/${rulesetpath}/geosite-category-gov-ir.srs"
       },
       {
-        "tag": "yandex",
+        "tag": "ir-sites",
         "type": "remote",
         "format": "binary",
-        "url": "https://${domain}/${rulesetpath}/geosite-yandex.srs"
+        "url": "https://${domain}/${rulesetpath}/geosite-ir.srs"
       },
       {
         "tag": "google",
@@ -1788,28 +1801,28 @@ cat > /var/www/${subspath}/1${userkey}-TRJ-CLIENT.json <<EOF
         "url": "https://${domain}/${rulesetpath}/geosite-telegram.srs"
       },
       {
-        "tag": "vk",
+        "tag": "facebook",
         "type": "remote",
         "format": "binary",
-        "url": "https://${domain}/${rulesetpath}/geosite-vk.srs"
+        "url": "https://${domain}/${rulesetpath}/geosite-facebook.srs"
       },
       {
-        "tag": "mailru",
+        "tag": "twitter",
         "type": "remote",
         "format": "binary",
-        "url": "https://${domain}/${rulesetpath}/geosite-mailru.srs"
+        "url": "https://${domain}/${rulesetpath}/geosite-twitter.srs"
       },
       {
-        "tag": "ozon",
+        "tag": "instagram",
         "type": "remote",
         "format": "binary",
-        "url": "https://${domain}/${rulesetpath}/geosite-ozon.srs"
+        "url": "https://${domain}/${rulesetpath}/geosite-instagram.srs"
       },
       {
-        "tag": "zoom",
+        "tag": "youtube",
         "type": "remote",
         "format": "binary",
-        "url": "https://${domain}/${rulesetpath}/geosite-zoom.srs"
+        "url": "https://${domain}/${rulesetpath}/geosite-youtube.srs"
       },
       {
         "tag": "reddit",
@@ -1818,202 +1831,22 @@ cat > /var/www/${subspath}/1${userkey}-TRJ-CLIENT.json <<EOF
         "url": "https://${domain}/${rulesetpath}/geosite-reddit.srs"
       },
       {
-        "tag": "twitch",
+        "tag": "discord",
         "type": "remote",
         "format": "binary",
-        "url": "https://${domain}/${rulesetpath}/geosite-twitch.srs"
+        "url": "https://${domain}/${rulesetpath}/geosite-discord.srs"
       },
       {
-        "tag": "tumblr",
+        "tag": "spotify",
         "type": "remote",
         "format": "binary",
-        "url": "https://${domain}/${rulesetpath}/geosite-tumblr.srs"
+        "url": "https://${domain}/${rulesetpath}/geosite-spotify.srs"
       },
       {
-        "tag": "4chan",
+        "tag": "linkedin",
         "type": "remote",
         "format": "binary",
-        "url": "https://${domain}/${rulesetpath}/geosite-4chan.srs"
-      },
-      {
-        "tag": "pinterest",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://${domain}/${rulesetpath}/geosite-pinterest.srs"
-      },
-      {
-        "tag": "deviantart",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://${domain}/${rulesetpath}/geosite-deviantart.srs"
-      },
-      {
-        "tag": "duckduckgo",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://${domain}/${rulesetpath}/geosite-duckduckgo.srs"
-      },
-      {
-        "tag": "yahoo",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://${domain}/${rulesetpath}/geosite-yahoo.srs"
-      },
-      {
-        "tag": "mozilla",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://${domain}/${rulesetpath}/geosite-mozilla.srs"
-      },
-      {
-        "tag": "samsung",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://${domain}/${rulesetpath}/geosite-samsung.srs"
-      },
-      {
-        "tag": "huawei",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://${domain}/${rulesetpath}/geosite-huawei.srs"
-      },
-      {
-        "tag": "apple",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://${domain}/${rulesetpath}/geosite-apple.srs"
-      },
-      {
-        "tag": "nvidia",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://${domain}/${rulesetpath}/geosite-nvidia.srs"
-      },
-      {
-        "tag": "xiaomi",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://${domain}/${rulesetpath}/geosite-xiaomi.srs"
-      },
-      {
-        "tag": "hp",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://${domain}/${rulesetpath}/geosite-hp.srs"
-      },
-      {
-        "tag": "asus",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://${domain}/${rulesetpath}/geosite-asus.srs"
-      },
-      {
-        "tag": "lenovo",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://${domain}/${rulesetpath}/geosite-lenovo.srs"
-      },
-      {
-        "tag": "lg",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://${domain}/${rulesetpath}/geosite-lg.srs"
-      },
-      {
-        "tag": "oracle",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://${domain}/${rulesetpath}/geosite-oracle.srs"
-      },
-      {
-        "tag": "adobe",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://${domain}/${rulesetpath}/geosite-adobe.srs"
-      },
-      {
-        "tag": "blender",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://${domain}/${rulesetpath}/geosite-blender.srs"
-      },
-      {
-        "tag": "drweb",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://${domain}/${rulesetpath}/geosite-drweb.srs"
-      },
-      {
-        "tag": "gitlab",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://${domain}/${rulesetpath}/geosite-gitlab.srs"
-      },
-      {
-        "tag": "debian",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://${domain}/${rulesetpath}/geosite-debian.srs"
-      },
-      {
-        "tag": "canonical",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://${domain}/${rulesetpath}/geosite-canonical.srs"
-      },
-      {
-        "tag": "python",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://${domain}/${rulesetpath}/geosite-python.srs"
-      },
-      {
-        "tag": "doi",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://${domain}/${rulesetpath}/geosite-doi.srs"
-      },
-      {
-        "tag": "springer",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://${domain}/${rulesetpath}/geosite-springer.srs"
-      },
-      {
-        "tag": "elsevier",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://${domain}/${rulesetpath}/geosite-elsevier.srs"
-      },
-      {
-        "tag": "sciencedirect",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://${domain}/${rulesetpath}/geosite-sciencedirect.srs"
-      },
-      {
-        "tag": "clarivate",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://${domain}/${rulesetpath}/geosite-clarivate.srs"
-      },
-      {
-        "tag": "sci-hub",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://${domain}/${rulesetpath}/geosite-sci-hub.srs"
-      },
-      {
-        "tag": "duolingo",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://${domain}/${rulesetpath}/geosite-duolingo.srs"
-      },
-      {
-        "tag": "aljazeera",
-        "type": "remote",
-        "format": "binary",
-        "url": "https://${domain}/${rulesetpath}/geosite-aljazeera.srs"
+        "url": "https://${domain}/${rulesetpath}/geosite-linkedin.srs"
       },
       {
         "tag": "category-ads-all",
@@ -2540,7 +2373,7 @@ add_sbmanager() {
         sbmanager_file="sb-manager-en.sh"
     fi
 
-    wget -O /usr/local/bin/sbmanager https://raw.githubusercontent.com/A-Zuro/Secret-Sing-Box/master/Scripts/${sbmanager_file}
+    wget -O /usr/local/bin/sbmanager https://raw.githubusercontent.com/moosti/Secret-Sing-Box-IR/master/Scripts/${sbmanager_file}
     chmod +x /usr/local/bin/sbmanager
     echo "alias ssb='/usr/local/bin/sbmanager'" >> /etc/bash.bashrc
 }
@@ -2553,16 +2386,16 @@ add_sub_page() {
         sub_page_file="sub-ru.html"
     elif [[ "${variant}" == "1" ]] && [[ "${language}" != "1" ]]
     then
-        sub_page_file="sub-en.html"
+        sub_page_file="sub-fa.html"
     elif [[ "${variant}" != "1" ]] && [[ "${language}" == "1" ]]
     then
         sub_page_file="sub-ru-hapr.html"
     else
-        sub_page_file="sub-en-hapr.html"
+        sub_page_file="sub-fa-hapr.html"
     fi
 
-    wget -O /var/www/${subspath}/sub.html https://raw.githubusercontent.com/A-Zuro/Secret-Sing-Box/master/Subscription-Page/${sub_page_file}
-    wget -O /var/www/${subspath}/background.jpg https://raw.githubusercontent.com/A-Zuro/Secret-Sing-Box/master/Subscription-Page/background.jpg
+    wget -O /var/www/${subspath}/sub.html https://raw.githubusercontent.com/moosti/Secret-Sing-Box-IR/master/Subscription-Page/${sub_page_file}
+    wget -O /var/www/${subspath}/background.jpg https://raw.githubusercontent.com/moosti/Secret-Sing-Box-IR/master/Subscription-Page/background.jpg
     sed -i -e "s/DOMAIN/$domain/g" -e "s/SUBSCRIPTION-PATH/$subspath/g" /var/www/${subspath}/sub.html
 }
 
